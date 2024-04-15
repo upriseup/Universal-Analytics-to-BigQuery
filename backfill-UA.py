@@ -30,17 +30,17 @@ def get_report(analytics):
             'reportRequests': [
                 {
                     'viewId': VIEW_ID,
-                    'dateRanges': [{'startDate': '2021-03-17', 'endDate': '2021-04-17'}],
+                    'dateRanges': [{'startDate': '2021-03-17', 'endDate': '2021-10-17'}],
                     # Metrics and dimensions are specified here
                     'metrics': [
                         {'expression': 'ga:sessions'},
                         {'expression': 'ga:pageviews'},
                         {'expression': 'ga:users'},
-                        #{'expression': 'ga:newUsers'},
-                        # {'expression': 'ga:bounceRate'},
-                        # {'expression': 'ga:sessionDuration'},
-                        # {'expression': 'ga:avgSessionDuration'},
-                        # {'expression': 'ga:pageviewsPerSession'},
+                        {'expression': 'ga:newUsers'},
+                        {'expression': 'ga:bounceRate'},
+                        {'expression': 'ga:sessionDuration'},
+                        {'expression': 'ga:avgSessionDuration'},
+                        {'expression': 'ga:pageviewsPerSession'},
                         # Add or remove metrics as per your requirements
                     ],
                     'dimensions': [
