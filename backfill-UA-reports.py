@@ -11,7 +11,7 @@ KEY_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json'  # Path to yo
 VIEW_ID = '151196979'  # Your Google Analytics View ID
 BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
 BIGQUERY_DATASET = 'ua_storage_test'  # BigQuery Dataset name where the data will be stored
-BIGQUERY_TABLE = 'ua-backfill-3'  # BigQuery Table name where the data will be stored
+BIGQUERY_TABLE = 'ua-backfill-location'  # BigQuery Table name where the data will be stored
 # Setting up the environment variable for Google Application Credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = KEY_FILE_LOCATION
 
@@ -22,8 +22,13 @@ def initialize_analyticsreporting():
     analytics = build('analyticsreporting', 'v4', credentials=credentials)
     return analytics
 
-def get_report(analytics):
+def get_report(analytics, extra_dimensions):
     """Fetches the report data from Google Analytics."""
+    # Define the default dimensions with always including 'ga:date'
+    dimensions = [{'name': 'ga:date'}]
+    # Append extra dimensions to the default dimensions list
+    dimensions.extend([{'name': dim} for dim in extra_dimensions])
+
     # Here, specify the analytics report request details
     return analytics.reports().batchGet(
         body={
@@ -33,30 +38,18 @@ def get_report(analytics):
                     'dateRanges': [{'startDate': '2021-03-17', 'endDate': '2021-10-17'}],
                     # Metrics and dimensions are specified here
                     'metrics': [
-                        # {'expression': 'ga:sessions'},
+                        {'expression': 'ga:sessions'},
                         {'expression': 'ga:pageviews'},
-                        # {'expression': 'ga:users'},
-                        # {'expression': 'ga:newUsers'},
-                        # {'expression': 'ga:bounceRate'},
-                        # {'expression': 'ga:sessionDuration'},
-                        # {'expression': 'ga:avgSessionDuration'},
-                        # {'expression': 'ga:pageviewsPerSession'},
+                        {'expression': 'ga:users'},
+                        {'expression': 'ga:newUsers'},
+                        {'expression': 'ga:bounceRate'},
+                        {'expression': 'ga:sessionDuration'},
+                        {'expression': 'ga:avgSessionDuration'},
+                        {'expression': 'ga:pageviewsPerSession'},
                         # Add or remove metrics as per your requirements
                     ],
-                    'dimensions': [ # 2 + date is the limit !!!
-                        # {'name': 'ga:country'},
-                        # {'name': 'ga:pageTitle'},
-                        # {'name': 'ga:browser'},
-                        # {'name': 'ga:pagePath'},
-                        # {'name': 'ga:source'},
-                        {'name':'ga:landingPagePath'},
-                        {'name': 'ga:campaign'},
-                        {'name': 'ga:date'},
-                        #{'name': 'ga:pagePath'},
-                        # {'name': 'ga:deviceCategory'},
-                        # Add or remove dimensions as per your requirements
-                    ],
-                    'pageSize': 20000  # Adjust the pageSize as needed
+                    'dimensions': dimensions,
+                    'pageSize': 50000  # Adjust the pageSize as needed
                 }
             ]
         }
@@ -128,7 +121,11 @@ def main():
     """Main function to execute the script."""
     try:
         analytics = initialize_analyticsreporting()
-        response = get_report(analytics)
+        dimensionsList = [
+            'ga:country',
+            'ga:city',
+        ]
+        response = get_report(analytics, dimensionsList)
         df = response_to_dataframe(response)
         upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, BIGQUERY_TABLE)
     except Exception as e:
