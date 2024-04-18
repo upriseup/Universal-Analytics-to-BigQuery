@@ -11,7 +11,7 @@ KEY_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json'  # Path to yo
 VIEW_ID = '151196979'  # Your Google Analytics View ID
 BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
 BIGQUERY_DATASET = 'ua_storage_test'  # BigQuery Dataset name where the data will be stored
-BIGQUERY_TABLE = 'ua-test'  # BigQuery Table name where the data will be stored
+BIGQUERY_TABLE = 'ua-TT'  # BigQuery Table name where the data will be stored
 # Setting up the environment variable for Google Application Credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = KEY_FILE_LOCATION
 
@@ -33,8 +33,8 @@ def get_report(analytics):
                     'dateRanges': [{'startDate': '2021-03-17', 'endDate': '2021-10-17'}],
                     # Metrics and dimensions are specified here
                     'metrics': [
-                        # {'expression': 'ga:sessions'},
-                        {'expression': 'ga:pageviews'},
+                        {'expression': 'ga:sessions'},
+                        # {'expression': 'ga:pageviews'},
                         # {'expression': 'ga:users'},
                         # {'expression': 'ga:newUsers'},
                         # {'expression': 'ga:bounceRate'},
