@@ -11,7 +11,7 @@ KEY_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json'  # Path to yo
 VIEW_ID = '151196979'  # Your Google Analytics View ID
 BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
 BIGQUERY_DATASET = 'ua_storage_test'  # BigQuery Dataset name where the data will be stored
-BIGQUERY_TABLE = 'ua-TT'  # BigQuery Table name where the data will be stored
+BIGQUERY_TABLE = 'ua-TT-14'  # BigQuery Table name where the data will be stored
 # Setting up the environment variable for Google Application Credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = KEY_FILE_LOCATION
 
@@ -34,19 +34,20 @@ def get_report(analytics):
                     # Metrics and dimensions are specified here
                     'metrics': [
                         {'expression': 'ga:sessions'},
-                        # {'expression': 'ga:pageviews'},
-                        # {'expression': 'ga:users'},
-                        # {'expression': 'ga:newUsers'},
-                        # {'expression': 'ga:bounceRate'},
-                        # {'expression': 'ga:sessionDuration'},
-                        # {'expression': 'ga:avgSessionDuration'},
-                        # {'expression': 'ga:pageviewsPerSession'},
+                        {'expression': 'ga:pageviews'},
+                        {'expression': 'ga:users'},
+                        {'expression': 'ga:newUsers'},
+                        {'expression': 'ga:bounceRate'},
+                        {'expression': 'ga:sessionDuration'},
+                        {'expression': 'ga:avgSessionDuration'},
+                        {'expression': 'ga:pageviewsPerSession'},
                         # Add or remove metrics as per your requirements
                     ],
                     'dimensions': [
                         {'name': 'ga:date'},
-                        {'name': 'ga:sourceMedium'},
                         {'name': 'ga:landingPagePath'},
+                        {'name': 'ga:sourceMedium'},
+                        
                     ],
                     'pageSize': 20000  # Adjust the pageSize as needed
                 }
