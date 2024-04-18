@@ -11,7 +11,7 @@ KEY_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json'  # Path to yo
 VIEW_ID = '151196979'  # Your Google Analytics View ID
 BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
 BIGQUERY_DATASET = 'ua_storage_test'  # BigQuery Dataset name where the data will be stored
-BIGQUERY_TABLE = 'ua-backfill-location'  # BigQuery Table name where the data will be stored
+BIGQUERY_TABLE = 'ua-report-'  # BigQuery Table name where the data will be stored
 # Setting up the environment variable for Google Application Credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = KEY_FILE_LOCATION
 
@@ -135,21 +135,16 @@ def main():
             'ga:browser',
             'ga:operatingSystem',
         ],
-        [
-                'ga:country',
-                'ga:city',
-        ]
         ]
     for report in reports:
         try:
-            analytics = initialize_analyticsreporting()
-            dimensionsList = [
-                'ga:country',
-                'ga:city',
-            ]
-            response = get_report(analytics, dimensionsList)
-            df = response_to_dataframe(response)
-            upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, BIGQUERY_TABLE)
+            #analytics = initialize_analyticsreporting()
+            #response = get_report(analytics, report)
+            #df = response_to_dataframe(response)
+            tableName = BIGQUERY_TABLE + str(reports.index(report)+1)
+            print(tableName)
+            print(report)
+            #upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, BIGQUERY_TABLE)
         except Exception as e:
             # Handling exceptions and printing error messages
             print(f"Error occurred: {e}")
