@@ -121,30 +121,28 @@ def main():
     """Main function to execute the script."""
 
     reports = [
-        [
+        {
             'ga:country',
             'ga:city',
-        ],
-        [
+        },
+        {
             'ga:language',
-        ],
-        [
+        },
+        {
             'ga:userType',
-        ],
-        [
+        },
+        {
             'ga:browser',
             'ga:operatingSystem',
-        ],
+        },
         ]
     for report in reports:
         try:
-            #analytics = initialize_analyticsreporting()
-            #response = get_report(analytics, report)
-            #df = response_to_dataframe(response)
+            analytics = initialize_analyticsreporting()
+            response = get_report(analytics, report)
+            df = response_to_dataframe(response)
             tableName = BIGQUERY_TABLE + str(reports.index(report)+1)
-            print(tableName)
-            print(report)
-            #upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, BIGQUERY_TABLE)
+            upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, BIGQUERY_TABLE)
         except Exception as e:
             # Handling exceptions and printing error messages
             print(f"Error occurred: {e}")
