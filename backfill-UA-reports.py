@@ -11,7 +11,7 @@ KEY_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json'  # Path to yo
 VIEW_ID = '151196979'  # Your Google Analytics View ID
 BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
 BIGQUERY_DATASET = 'ua_storage_test'  # BigQuery Dataset name where the data will be stored
-BIGQUERY_TABLE = 'ua-report-'  # BigQuery Table name where the data will be stored
+BIGQUERY_TABLE = 'report-'  # BigQuery Table name where the data will be stored
 # Setting up the environment variable for Google Application Credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = KEY_FILE_LOCATION
 
@@ -121,30 +121,33 @@ def main():
     """Main function to execute the script."""
 
     reports = [
-        {
-            'ga:country',
-            'ga:city',
-        },
-        {
-            'ga:language',
-        },
-        {
-            'ga:userType',
-        },
-        {
-            'ga:browser',
-            'ga:operatingSystem',
-        },
-        ]
+        {'ga:country','ga:city',}, # 1
+        {'ga:language',}, #2
+        {'ga:userType',},
+        {'ga:browser','ga:operatingSystem',},
+        {'ga:hostname', },
+        {'ga:deviceCategory', },
+        {'ga:sourceMedium', 'ga:campaign', },
+        #{'ga:sourceMedium', 'ga:landingPagePath', },
+        {'ga:sourceMedium', 'ga:adContent', },
+        {'ga:sourceMedium', 'ga:keyword', },
+        # {'ga:sourceMedium', 'ga:campaign', 'ga:adContent', 'ga:keyword', },
+        #{'ga:pagePath', 'ga:pageTitle', },
+        {'ga:landingPagePath', },
+        {'ga:exitPagePath', },
+        #{'ga:eventCategory', 'ga:eventAction', 'ga:eventLabel', },
+        #{'ga:productName', 'ga:productSku', 'ga:productCategory', },
+    ]
     for report in reports:
         try:
             analytics = initialize_analyticsreporting()
             response = get_report(analytics, report)
             df = response_to_dataframe(response)
             tableName = BIGQUERY_TABLE + str(reports.index(report)+1)
-            upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, BIGQUERY_TABLE)
+            upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
         except Exception as e:
             # Handling exceptions and printing error messages
+            print("Error with ", report)
             print(f"Error occurred: {e}")
 
 if __name__ == '__main__':
