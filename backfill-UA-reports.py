@@ -119,18 +119,40 @@ def upload_to_bigquery(df, project_id, dataset_id, table_id):
 
 def main():
     """Main function to execute the script."""
-    try:
-        analytics = initialize_analyticsreporting()
-        dimensionsList = [
+
+    reports = [
+        [
             'ga:country',
             'ga:city',
+        ],
+        [
+            'ga:language',
+        ],
+        [
+            'ga:userType',
+        ],
+        [
+            'ga:browser',
+            'ga:operatingSystem',
+        ],
+        [
+                'ga:country',
+                'ga:city',
         ]
-        response = get_report(analytics, dimensionsList)
-        df = response_to_dataframe(response)
-        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, BIGQUERY_TABLE)
-    except Exception as e:
-        # Handling exceptions and printing error messages
-        print(f"Error occurred: {e}")
+        ]
+    for report in reports:
+        try:
+            analytics = initialize_analyticsreporting()
+            dimensionsList = [
+                'ga:country',
+                'ga:city',
+            ]
+            response = get_report(analytics, dimensionsList)
+            df = response_to_dataframe(response)
+            upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, BIGQUERY_TABLE)
+        except Exception as e:
+            # Handling exceptions and printing error messages
+            print(f"Error occurred: {e}")
 
 if __name__ == '__main__':
     main()  # Entry point of the script
