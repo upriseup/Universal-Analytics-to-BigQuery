@@ -11,7 +11,7 @@ KEY_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json'  # Path to yo
 VIEW_ID = '151196979'  # Your Google Analytics View ID
 BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
 BIGQUERY_DATASET = 'ua_storage_test'  # BigQuery Dataset name where the data will be stored
-BIGQUERY_TABLE = 'report-'  # BigQuery Table name where the data will be stored
+BIGQUERY_TABLE = 'report-15may-2-'  # BigQuery Table name where the data will be stored
 # Setting up the environment variable for Google Application Credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = KEY_FILE_LOCATION
 
@@ -125,7 +125,7 @@ def main():
         {'ga:language',}, #2
         {'ga:userType',},
         {'ga:browser','ga:operatingSystem',},
-        {'ga:hostname', },
+        #{'ga:hostname', },
         {'ga:deviceCategory', },
         {'ga:sourceMedium', 'ga:campaign', },
         #{'ga:sourceMedium', 'ga:landingPagePath', },
@@ -133,6 +133,7 @@ def main():
         {'ga:sourceMedium', 'ga:keyword', },
         # {'ga:sourceMedium', 'ga:campaign', 'ga:adContent', 'ga:keyword', },
         #{'ga:pagePath', 'ga:pageTitle', },
+        {'ga:pagePath', },#'ga:sourceMedium', },
         {'ga:landingPagePath', },
         {'ga:exitPagePath', },
         #{'ga:eventCategory', 'ga:eventAction', 'ga:eventLabel', },
