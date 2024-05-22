@@ -8,10 +8,10 @@ import os
 # Configuration variables for Google Analytics and BigQuery
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
 KEY_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json'  # Path to your Google Cloud service account key file
-VIEW_ID = '151196979'  # Your Google Analytics View ID
+VIEW_ID = '125503545'  # Your Google Analytics View ID
 BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
 BIGQUERY_DATASET = 'ua_storage_test'  # BigQuery Dataset name where the data will be stored
-BIGQUERY_TABLE = 'report-15may-2-'  # BigQuery Table name where the data will be stored
+BIGQUERY_TABLE = 'test-1'  # BigQuery Table name where the data will be stored
 # Setting up the environment variable for Google Application Credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = KEY_FILE_LOCATION
 
@@ -25,7 +25,7 @@ def initialize_analyticsreporting():
 def get_report(analytics, extra_dimensions):
     """Fetches the report data from Google Analytics."""
     # Define the default dimensions with always including 'ga:date'
-    dimensions = [{'name': 'ga:date'}]
+    dimensions = []#[{'name': 'ga:date'}]
     # Append extra dimensions to the default dimensions list
     dimensions.extend([{'name': dim} for dim in extra_dimensions])
 
@@ -121,23 +121,26 @@ def main():
     """Main function to execute the script."""
 
     reports = [
-        {'ga:country','ga:city',}, # 1
-        {'ga:language',}, #2
-        {'ga:userType',},
-        {'ga:browser','ga:operatingSystem',},
-        #{'ga:hostname', },
-        {'ga:deviceCategory', },
-        {'ga:sourceMedium', 'ga:campaign', },
-        #{'ga:sourceMedium', 'ga:landingPagePath', },
-        {'ga:sourceMedium', 'ga:adContent', },
-        {'ga:sourceMedium', 'ga:keyword', },
-        # {'ga:sourceMedium', 'ga:campaign', 'ga:adContent', 'ga:keyword', },
-        #{'ga:pagePath', 'ga:pageTitle', },
-        {'ga:pagePath', },#'ga:sourceMedium', },
-        {'ga:landingPagePath', },
-        {'ga:exitPagePath', },
-        #{'ga:eventCategory', 'ga:eventAction', 'ga:eventLabel', },
-        #{'ga:productName', 'ga:productSku', 'ga:productCategory', },
+        {'ga:clientId',}, # no schema
+        {'ga:userId',}, # unkown dimension
+        {'ga:sessionId',}, # unknown dimension
+        # {'ga:country','ga:city',}, # 1
+        # {'ga:language',}, #2
+        # {'ga:userType',},
+        # {'ga:browser','ga:operatingSystem',},
+        # ###{'ga:hostname', },
+        # {'ga:deviceCategory', },
+        # {'ga:sourceMedium', 'ga:campaign', },
+        # ###{'ga:sourceMedium', 'ga:landingPagePath', },
+        # {'ga:sourceMedium', 'ga:adContent', },
+        # {'ga:sourceMedium', 'ga:keyword', },
+        # ### {'ga:sourceMedium', 'ga:campaign', 'ga:adContent', 'ga:keyword', },
+        # ###{'ga:pagePath', 'ga:pageTitle', },
+        # {'ga:pagePath', },#'ga:sourceMedium', },
+        # {'ga:landingPagePath', },
+        # {'ga:exitPagePath', },
+        # ###{'ga:eventCategory', 'ga:eventAction', 'ga:eventLabel', },
+        # ###{'ga:productName', 'ga:productSku', 'ga:productCategory', },
     ]
     for report in reports:
         try:
