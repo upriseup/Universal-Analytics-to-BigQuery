@@ -10,8 +10,15 @@ import os
 # Configuration variables for Google Analytics and BigQuery
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
 KEY_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json'  # Path to your Google Cloud service account key file
-VIEW_ID = '177487329'  # Uprise Up test, wills view
-#VIEW_ID = '79428303' # main view
+
+URU_VIEW = '177487329'
+URU_MAIN_VIEW = '79428303'
+RVS_VIEW = '107499264'
+RVS_NHSVR_VIEW = '225376456'
+POSTAL_MUSEUM_VIEW = '116588142'
+
+VIEW_ID = URU_VIEW  # Current view id
+
 BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
 BIGQUERY_DATASET = 'ua_storage_test'  # BigQuery Dataset name where the data will be stored
 BIGQUERY_TABLE = 'test-1'  # BigQuery Table name where the data will be stored
