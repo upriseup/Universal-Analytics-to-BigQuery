@@ -1,0 +1,3 @@
+if(B35<>"",CONCATENATE($D$2,lower(B35),$E$2,D35,$F$2),if(C35,("-- " & JOIN(" ", ARRAYFORMULA(PROPER(SPLIT(D35, "_"))))),""))
+
+

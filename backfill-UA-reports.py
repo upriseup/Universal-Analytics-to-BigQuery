@@ -8,7 +8,8 @@ import os
 # Configuration variables for Google Analytics and BigQuery
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
 KEY_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json'  # Path to your Google Cloud service account key file
-VIEW_ID = '125503545'  # Your Google Analytics View ID
+VIEW_ID = '177487329'  # Uprise Up test, wills view
+#VIEW_ID = '79428303' # main view
 BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
 BIGQUERY_DATASET = 'ua_storage_test'  # BigQuery Dataset name where the data will be stored
 BIGQUERY_TABLE = 'test-1'  # BigQuery Table name where the data will be stored
@@ -25,7 +26,7 @@ def initialize_analyticsreporting():
 def get_report(analytics, extra_dimensions):
     """Fetches the report data from Google Analytics."""
     # Define the default dimensions with always including 'ga:date'
-    dimensions = []#[{'name': 'ga:date'}]
+    dimensions = [{'name': 'ga:date'}]
     # Append extra dimensions to the default dimensions list
     dimensions.extend([{'name': dim} for dim in extra_dimensions])
 
@@ -37,6 +38,7 @@ def get_report(analytics, extra_dimensions):
                     'viewId': VIEW_ID,
                     'dateRanges': [{'startDate': '2021-03-17', 'endDate': '2021-10-17'}],
                     # Metrics and dimensions are specified here
+                    'User' : [{'userId: ga:userId'}],
                     'metrics': [
                         {'expression': 'ga:sessions'},
                         {'expression': 'ga:pageviews'},

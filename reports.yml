@@ -1,0 +1,78 @@
+reports:
+  # Acquisition Reports ADD DATE AND GOALS AS DEFAULT
+  - id: 1
+    name: "Acquisition Overview"
+    dimensions: ["ga:date", "ga:campaign", "ga:sourceMedium",]
+    metrics: ["ga:sessions", "ga:users", "ga:pageviews", "ga:avgSessionDuration", "ga:bounceRate", "ga:newUsers","ga:goal1Completions","ga:goal2Completions",
+              "ga:goal3Completions","ga:goal4Completions","ga:goal5Completions","ga:goal6Completions","ga:goal7Completions","ga:goal8Completions"]
+    # Overall performance of different acquisition channels.
+    # Identifying top-performing sources, understanding bounce rate and user engagement across channels.
+
+  # Audience Reports
+  - id: 5
+    name: "Audience Demographics Overview"
+    dimensions: ["ga:date","ga:userGender", "ga:userAgeBracket","ga:sourceMedium",]
+    metrics: ["ga:sessions", "ga:users", "ga:newUsers", "ga:bounceRate", "ga:pageviewsPerSession", "ga:avgSessionDuration", "ga:goal1Completions"]
+    # Overview of user demographics.
+    # Tailoring marketing strategies to target audiences and identifying demographic segments with the highest engagement.
+
+  - id: 6
+    name: "Geographic Distribution"
+    dimensions: ["ga:date", "ga:country", "ga:city",]
+    metrics: ["ga:sessions", "ga:users", "ga:newUsers", "ga:bounceRate", "ga:pageviewsPerSession", "ga:avgSessionDuration", "ga:goal1Completions"]
+    # Performance in different regions.
+    # Identifying potential markets and understanding cultural and linguistic impacts on engagement.
+
+  - id: 7
+    name: "Device and Technology Usage"
+    dimensions: ["ga:date", "ga:deviceCategory", "ga:browser", "ga:operatingSystem"]
+    metrics: ["ga:sessions", "ga:users", "ga:pageviews", "ga:goal1Completions""ga:goal1Completions","ga:goal2Completions",
+              "ga:goal3Completions","ga:goal4Completions","ga:goal5Completions","ga:goal6Completions","ga:goal7Completions","ga:goal8Completions",]
+    # User behavior based on device and technology.
+    # Optimizing site performance for different devices and identifying trends in technology usage.
+
+  # Behavior Reports
+  - id: 10
+    name: "Site Content Performance Overview"
+    dimensions: ["ga:date", "ga:pagePath","ga:sourceMedium",]
+    metrics: ["ga:pageviews", "ga:uniquePageviews", "ga:avgTimeOnPage", "ga:bounceRate", "ga:exitRate"]
+    # Performance of site content.
+    # Identifying popular pages and understanding user engagement with content.
+
+  - id: 11
+    name: "Landing Page Performance"
+    dimensions: ["ga:date", "ga:landingPagePath", "ga:sourceMedium",]
+    metrics: ["ga:sessions", "ga:percentNewSessions", "ga:newUsers", "ga:bounceRate", "ga:pageviewsPerSession", "ga:avgSessionDuration"]
+    # Effectiveness of landing pages.
+    # Understanding user behavior on entry pages and optimizing landing pages for better engagement.
+
+  # Ecommerce Reports
+  - id: 14
+    name: "Ecommerce Performance Overview"
+    dimensions: ["ga:date"]
+    metrics: ["ga:itemRevenue", "ga:transactionsPerSession"]
+    # Overall ecommerce performance.
+    # Identifying trends in sales and understanding peak sales periods.
+
+  - id: 15
+    name: "Product Performance"
+    dimensions: ["ga:date", "ga:productName", "ga:productCategory", "ga:productSku", "ga:daysToTransaction"]
+    metrics: ["ga:uniquePurchases", "ga:itemQuantity", "ga:revenuePerItem", "ga:itemsPerPurchase"]
+    # Performance of individual products.
+    # Identifying top-selling products and understanding product categories and brands.
+
+  # User Engagement Reports
+  - id: 18
+    name: "User Engagement Over Time"
+    dimensions: ["ga:date", "ga:hour", "ga:dayOfWeek"]
+    metrics: ["ga:users", "ga:sessions", "ga:sessionDuration", "ga:avgSessionDuration", "ga:bounceRate", "ga:pageviews", "ga:goal1Completions"]
+    # Trends in user engagement over time.
+    # Identifying busy periods and optimizing content for peak times.
+
+  - id: 21
+    name: "Audience Loyalty and Retention"
+    dimensions: ["ga:userType", "ga:sessionCount", "ga:daysSinceLastSession"]
+    metrics: ["ga:sessions", "ga:pageviews", "ga:avgSessionDuration", "ga:bounceRate"]
+    # User retention and loyalty.
+    # Measuring loyalty and identifying strategies to increase repeat visits.
+
