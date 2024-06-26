@@ -8,10 +8,12 @@ import os
 # Configuration variables for Google Analytics and BigQuery
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
 KEY_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json'  # Path to your Google Cloud service account key file
-VIEW_ID = '151196979'  # Your Google Analytics View ID
+URU_REPORTING_VIEW = '79428303'
+URU_MAIN_VIEW = '151196979'
+VIEW_ID = URU_REPORTING_VIEW  # Your Google Analytics View ID
 BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
 BIGQUERY_DATASET = 'ua_storage_test'  # BigQuery Dataset name where the data will be stored
-BIGQUERY_TABLE = 'ua-backfill-3'  # BigQuery Table name where the data will be stored
+BIGQUERY_TABLE = '26-june-reporting-5'  # BigQuery Table name where the data will be stored
 # Setting up the environment variable for Google Application Credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = KEY_FILE_LOCATION
 
@@ -22,45 +24,86 @@ def initialize_analyticsreporting():
     analytics = build('analyticsreporting', 'v4', credentials=credentials)
     return analytics
 
-def get_report(analytics):
+def get_report(analytics, goals):
     """Fetches the report data from Google Analytics."""
     # Here, specify the analytics report request details
-    return analytics.reports().batchGet(
-        body={
-            'reportRequests': [
-                {
-                    'viewId': VIEW_ID,
-                    'dateRanges': [{'startDate': '2021-03-17', 'endDate': '2021-10-17'}],
-                    # Metrics and dimensions are specified here
-                    'metrics': [
-                        # {'expression': 'ga:sessions'},
-                        {'expression': 'ga:pageviews'},
-                        # {'expression': 'ga:users'},
-                        # {'expression': 'ga:newUsers'},
-                        # {'expression': 'ga:bounceRate'},
-                        # {'expression': 'ga:sessionDuration'},
-                        # {'expression': 'ga:avgSessionDuration'},
-                        # {'expression': 'ga:pageviewsPerSession'},
-                        # Add or remove metrics as per your requirements
-                    ],
-                    'dimensions': [ # 2 + date is the limit !!!
-                        # {'name': 'ga:country'},
-                        # {'name': 'ga:pageTitle'},
-                        # {'name': 'ga:browser'},
-                        # {'name': 'ga:pagePath'},
-                        # {'name': 'ga:source'},
-                        {'name':'ga:landingPagePath'},
-                        {'name': 'ga:campaign'},
-                        {'name': 'ga:date'},
-                        #{'name': 'ga:pagePath'},
-                        # {'name': 'ga:deviceCategory'},
-                        # Add or remove dimensions as per your requirements
-                    ],
-                    'pageSize': 20000  # Adjust the pageSize as needed
-                }
-            ]
-        }
-    ).execute()
+    if not(goals):
+        return analytics.reports().batchGet(
+            body={
+                'reportRequests': [
+                    {
+                        'viewId': VIEW_ID,
+                        'dateRanges': [{'startDate': '2020-07-01', 'endDate': '2020-07-31'}],
+                        # Metrics and dimensions are specified here
+                        'metrics': [
+                            {'expression': 'ga:sessions'},
+                            {'expression': 'ga:pageviews'},
+                            {'expression': 'ga:users'},
+                            {'expression': 'ga:newUsers'},
+                            {'expression': 'ga:bounceRate'},
+                            {'expression': 'ga:sessionDuration'},
+                            # Add or remove metrics as per your requirements
+                        ],
+                        'dimensions': [  # 2 + date is the limit !!!
+                            {'name': 'ga:date'},
+                            {'name': 'ga:campaign'},
+                            {'name': 'ga:source'},
+                            {'name': 'ga:medium'},
+                            # {'name': 'ga:country'},
+                            # {'name': 'ga:pageTitle'},
+                            # {'name': 'ga:browser'},
+                            # {'name': 'ga:pagePath'},
+                            # {'name': 'ga:source'},
+                            # {'name': 'ga:date'},
+                            # {'name': 'ga:pagePath'},
+                            # {'name': 'ga:deviceCategory'},
+                            # Add or remove dimensions as per your requirements
+                        ],
+                        'pageSize': 20000  # Adjust the pageSize as needed
+                    }
+                ]
+            }
+        ).execute()
+    else: # IF THIS IS THE GOALS REPORT
+        return analytics.reports().batchGet(
+            body={
+                'reportRequests': [
+                    {
+                        'viewId': VIEW_ID,
+                        'dateRanges': [{'startDate': '2021-03-17', 'endDate': '2021-10-17'}],
+                        # Metrics and dimensions are specified here
+                        'metrics': [
+                            {'expression': 'ga:goal1Completions'},
+                            {'expression': 'ga:goal2Completions'},
+                            {'expression': 'ga:goal3Completions'},
+                            {'expression': 'ga:goal4Completions'},
+                            {'expression': 'ga:goal5Completions'},
+                            {'expression': 'ga:goal6Completions'},
+                            {'expression': 'ga:goal7Completions'},
+                            {'expression': 'ga:goal8Completions'},
+                        ],
+                        'dimensions': [  # 2 + date is the limit !!!
+                            {'name': 'ga:date'},
+                            {'name': 'ga:campaign'},
+                            {'name': 'ga:source'},
+                            {'name': 'ga:medium'},
+                            # {'name': 'ga:country'},
+                            # {'name': 'ga:pageTitle'},
+                            # {'name': 'ga:browser'},
+                            # {'name': 'ga:pagePath'},
+                            # {'name': 'ga:source'},
+                            # {'name': 'ga:date'},
+                            # {'name': 'ga:pagePath'},
+                            # {'name': 'ga:deviceCategory'},
+                            # Add or remove dimensions as per your requirements
+                        ],
+                        'pageSize': 20000  # Adjust the pageSize as needed
+                    }
+                ]
+            }
+        ).execute()
+
+    
 
 def response_to_dataframe(response):
     """Converts the API response into a pandas DataFrame."""
@@ -128,9 +171,14 @@ def main():
     """Main function to execute the script."""
     try:
         analytics = initialize_analyticsreporting()
-        response = get_report(analytics)
+        response = get_report(analytics, goals=False)
         df = response_to_dataframe(response)
         upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, BIGQUERY_TABLE)
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, goals=True)
+        df = response_to_dataframe(response)
+        goals_table = BIGQUERY_TABLE + '_goals'
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, goals_table)
     except Exception as e:
         # Handling exceptions and printing error messages
         print(f"Error occurred: {e}")

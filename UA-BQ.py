@@ -21,7 +21,7 @@ VIEW_ID = URU_VIEW  # Current view id
 
 BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
 BIGQUERY_DATASET = 'ua_storage_test'  # BigQuery Dataset name where the data will be stored
-BIGQUERY_TABLE = 'test-1'  # BigQuery Table name where the data will be stored
+BIGQUERY_TABLE = 'test-1-26jun'  # BigQuery Table name where the data will be stored
 # Setting up the environment variable for Google Application Credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = KEY_FILE_LOCATION
 
@@ -132,12 +132,12 @@ def main():
     """Main function to execute the script."""
 
     reports = [
-        {'ga:clientId',}, # no schema
-        {'ga:userId',}, # unkown dimension
-        {'ga:sessionId',}, # unknown dimension
-        # {'ga:country','ga:city',}, # 1
-        # {'ga:language',}, #2
-        # {'ga:userType',},
+        # {'ga:clientId',}, # no schema
+        # {'ga:userId',}, # unkown dimension
+        # {'ga:sessionId',}, # unknown dimension
+        {'ga:country','ga:city',}, # 1
+        {'ga:language',}, #2
+        {'ga:userType',},
         # {'ga:browser','ga:operatingSystem',},
         # ###{'ga:hostname', },
         # {'ga:deviceCategory', },
