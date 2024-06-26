@@ -8,11 +8,12 @@ import os
 # Configuration variables for Google Analytics and BigQuery
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
 KEY_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json'  # Path to your Google Cloud service account key file
-VIEW_ID = '177487329'  # Uprise Up test, wills view
-#VIEW_ID = '79428303' # main view
+URU_REPORTING_VIEW = '79428303'
+URU_MAIN_VIEW = '151196979'
+VIEW_ID = URU_REPORTING_VIEW 
 BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
 BIGQUERY_DATASET = 'ua_storage_test'  # BigQuery Dataset name where the data will be stored
-BIGQUERY_TABLE = 'test-1'  # BigQuery Table name where the data will be stored
+BIGQUERY_TABLE = 'dynamic-test-1'  # BigQuery Table name where the data will be stored
 # Setting up the environment variable for Google Application Credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = KEY_FILE_LOCATION
 
@@ -26,7 +27,9 @@ def initialize_analyticsreporting():
 def get_report(analytics, extra_dimensions):
     """Fetches the report data from Google Analytics."""
     # Define the default dimensions with always including 'ga:date'
+    #print("extradims", type(extra_dimensions))
     dimensions = [{'name': 'ga:date'}]
+    #print("dims", type(dimensions))
     # Append extra dimensions to the default dimensions list
     dimensions.extend([{'name': dim} for dim in extra_dimensions])
 
@@ -123,28 +126,13 @@ def main():
     """Main function to execute the script."""
 
     reports = [
-        {'ga:clientId',}, # no schema
-        {'ga:userId',}, # unkown dimension
-        {'ga:sessionId',}, # unknown dimension
-        # {'ga:country','ga:city',}, # 1
-        # {'ga:language',}, #2
-        # {'ga:userType',},
-        # {'ga:browser','ga:operatingSystem',},
-        # ###{'ga:hostname', },
-        # {'ga:deviceCategory', },
-        # {'ga:sourceMedium', 'ga:campaign', },
-        # ###{'ga:sourceMedium', 'ga:landingPagePath', },
-        # {'ga:sourceMedium', 'ga:adContent', },
-        # {'ga:sourceMedium', 'ga:keyword', },
-        # ### {'ga:sourceMedium', 'ga:campaign', 'ga:adContent', 'ga:keyword', },
-        # ###{'ga:pagePath', 'ga:pageTitle', },
-        # {'ga:pagePath', },#'ga:sourceMedium', },
-        # {'ga:landingPagePath', },
-        # {'ga:exitPagePath', },
-        # ###{'ga:eventCategory', 'ga:eventAction', 'ga:eventLabel', },
-        # ###{'ga:productName', 'ga:productSku', 'ga:productCategory', },
+        {'ga:campaign','ga:source','ga:medium',},
+        {'ga:country','ga:city',},
+        {'ga:language',}, # no schema
     ]
     for report in reports:
+        print("1, ")
+        print(report)
         try:
             analytics = initialize_analyticsreporting()
             response = get_report(analytics, report)
