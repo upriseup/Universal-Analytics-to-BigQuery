@@ -13,7 +13,7 @@ NHSVR_KEY = '../keys/UA Data Storage Keys/NHSVR/ua-storage-426914-b77531a2d41b.j
 RVS_KEY = '../keys/UA Data Storage Keys/RVS/bubbly-fuze-426813-p9-371ff48952a4.json'
 URU_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json' 
  # Path to your Google Cloud service account key file
-KEY_FILE_LOCATION = RVS_KEY
+
 
 
 URU_REPORTING_VIEW = '79428303'
@@ -21,23 +21,43 @@ URU_MAIN_VIEW = '151196979'#
 POSTAL_VIEW = '132787952'
 RVS_VIEW = '107499264'
 NHSVR_VIEW = '225376456'
-VIEW_ID = RVS_VIEW  # Your Google Analytics View ID
+  # Your Google Analytics View ID
 
 POSTAL_PROJECT = 'oceanic-cache-426909-q9'
 RVS_PROJECT = 'bubbly-fuze-426813-p9'
 NHSVS_PROJECT = 'ua-storage-426914'
 URU_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
 
-BIGQUERY_PROJECT = RVS_PROJECT
+URU_DATE_RANGE = [{'startDate': '2020-07-01', 'endDate': '2020-07-31'}]
+POSTAL_DATE_RANGE = [{'startDate': '2016-11-01', 'endDate': '2023-08-26'}]
+RVS_DATE_RANGE = [{'startDate': '2015-08-25', 'endDate': '2023-10-04'}]
+
+# NHSVR_DATE_RANGE = [{'startDate': '2016-11-01', 'endDate': '2023-08-26'}]
+
+# KEY_FILE_LOCATION = RVS_KEY
+# DATE_RANGE = RVS_DATE_RANGE
+# VIEW_ID = RVS_VIEW
+# BIGQUERY_PROJECT = RVS_PROJECT
+
+# KEY_FILE_LOCATION = NHSVR_KEY
+# DATE_RANGE = NHSVR_DATE_RANGE
+# VIEW_ID = NHSVR_VIEW
+# BIGQUERY_PROJECT = NHSVS_PROJECT
+
+# KEY_FILE_LOCATION = POSTAL_KEY
+# DATE_RANGE = POSTAL_DATE_RANGE
+# VIEW_ID = POSTAL_VIEW
+# BIGQUERY_PROJECT = POSTAL_PROJECT
+
+KEY_FILE_LOCATION = URU_FILE_LOCATION
+DATE_RANGE = URU_DATE_RANGE
+VIEW_ID = URU_REPORTING_VIEW
+BIGQUERY_PROJECT = URU_PROJECT
+
 BIGQUERY_DATASET = 'ua_storage'  # BigQuery Dataset name where the data will be stored
 BIGQUERY_TABLE = 'reports'  # BigQuery Table name where the data will be stored
 
-POSTAL_DATE_RANGE = [{'startDate': '2016-11-01', 'endDate': '2023-08-26'}]
-RVS_DATE_RANGE = [{'startDate': '2015-08-25', 'endDate': '2023-10-04'}]
-NHSVR_DATE_RANGE = [{'startDate': '2016-11-01', 'endDate': '2023-08-26'}]
-
-
-NUMBER_OF_GOALS = 10
+NUMBER_OF_GOALS = 8
 # Setting up the environment variable for Google Application Credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = KEY_FILE_LOCATION
 metrics_goals_1 = [{'expression': f'ga:goal{i+1}Completions'} for i in range(NUMBER_OF_GOALS)]
@@ -58,7 +78,7 @@ def get_report(analytics, dimensions, metrics):
             'reportRequests': [
                 {
                     'viewId': VIEW_ID,
-                    'dateRanges': RVS_DATE_RANGE,
+                    'dateRanges': DATE_RANGE,
                     # Metrics and dimensions are specified here
                     'metrics': metrics,
                     'dimensions': dimensions,
@@ -170,7 +190,7 @@ def main():
         print(f"Error occurred: {e}")
 
     try:
-        tableName = "Audience Demographics Overview"
+        tableName = "Audience Demographics Overview" # only one row for uru in july
         dimensions = [
             {'name': 'ga:date'},
             {'name': 'ga:userGender'},
