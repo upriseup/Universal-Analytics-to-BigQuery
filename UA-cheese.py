@@ -12,7 +12,7 @@ URU_REPORTING_VIEW = '79428303'
 URU_MAIN_VIEW = '151196979'
 VIEW_ID = URU_REPORTING_VIEW  # Your Google Analytics View ID
 BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
-BIGQUERY_DATASET = 'ua_storage_test2'  # BigQuery Dataset name where the data will be stored
+BIGQUERY_DATASET = 'ua_storage_test3'  # BigQuery Dataset name where the data will be stored
 BIGQUERY_TABLE = 'cheese-1'  # BigQuery Table name where the data will be stored
 NUMBER_OF_GOALS = 8
 # Setting up the environment variable for Google Application Credentials
@@ -154,7 +154,7 @@ def main():
             {'name': 'ga:date'},
             {'name': 'ga:userGender'},
             {'name': 'ga:userAgeBracket'},
-            {'name': 'ga:sourceMedium'},
+            # {'name': 'ga:sourceMedium'}, # unknown schema with this
         ]
         metrics = [
             {'expression': 'ga:sessions'},
@@ -206,6 +206,7 @@ def main():
         # Handling exceptions and printing error messages
         print(tableName)
         print(f"Error occurred: {e}")
+        print(" ")
 
     try:
         tableName="Device and Technology Usage " 
@@ -213,15 +214,12 @@ def main():
             {'name': 'ga:date'},
             {'name': 'ga:deviceCategory'},
             {'name': 'ga:browser'},
-            {'name': 'ga:operatingSystem '},
+            # {'name': 'ga:operatingSystem '},Unknown dimension(s): ga:operatingSystem
         ]
         metrics = [
             {'expression': 'ga:sessions'},
             {'expression': 'ga:users'},
-            {'expression': 'ga:newUsers'},
-            {'expression': 'ga:bounceRate'},
             {'expression': 'ga:pageviews'},
-            {'expression': 'ga:avgSessionDuration'},
         ]
         analytics = initialize_analyticsreporting()
         response = get_report(analytics, dimensions, metrics)
@@ -236,6 +234,7 @@ def main():
         # Handling exceptions and printing error messages
         print(tableName)
         print(f"Error occurred: {e}")
+        print()
 
     try:
         tableName="Site Content Performance Overview"  
@@ -245,12 +244,11 @@ def main():
             {'name': 'ga:sourceMedium'},
         ]
         metrics = [
-            {'expression': 'ga:sessions'},
-            {'expression': 'ga:users'},
-            {'expression': 'ga:newUsers'},
-            {'expression': 'ga:bounceRate'},
             {'expression': 'ga:pageviews'},
-            {'expression': 'ga:avgSessionDuration'},
+            {'expression': 'ga:uniquePageviews'},
+            {'expression': 'ga:avgTimeOnPage'},
+            {'expression': 'ga:bounceRate'},
+            {'expression': 'ga:exitRate'},
         ]
         analytics = initialize_analyticsreporting()
         response = get_report(analytics, dimensions, metrics)
@@ -265,10 +263,7 @@ def main():
         # Handling exceptions and printing error messages
         print(tableName)
         print(f"Error occurred: {e}")
-
+        print()
     
-
-    
-
 if __name__ == '__main__':
     main()  # Entry point of the script
