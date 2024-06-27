@@ -68,7 +68,7 @@ RVS_DATE_RANGE = [{'startDate': '2015-08-25', 'endDate': '2023-10-04'}]
 
 KEY_FILE_LOCATION = POSTAL_KEY
 #DATE_RANGE = DATE_2017_Q1_Q2
-DATE_RANGE = DATE_2023 #POSTAL_DATE_RANGE
+DATE_RANGE = DATE_2016 #POSTAL_DATE_RANGE iterate through all years, two halfs for 2022
 startYear = DATE_RANGE[0].get('startDate')[:4]
 endYear = DATE_RANGE[0].get('endDate')[:4]
 startDate = DATE_RANGE[0].get('startDate')[:4] + " Q1 Q2"
