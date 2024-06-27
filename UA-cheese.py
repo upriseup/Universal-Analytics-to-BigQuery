@@ -8,7 +8,8 @@ import os
 # Configuration variables for Google Analytics and BigQuery
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
 
-POSTAL_KEY = '../keys/UA Data Storage Keys/Postal Museum/oceanic-cache-426909-q9-fb060f06ea89.json'
+POSTAL_KEY_OLD = '../keys/UA Data Storage Keys/Postal Museum/oceanic-cache-426909-q9-fb060f06ea89.json'
+POSTAL_KEY = '../keys/UA Data Storage Keys/Postal Backup Key/ua-data-storage-postal-cd258757b593.json'
 NHSVR_KEY = '../keys/UA Data Storage Keys/NHSVR/ua-storage-426914-b77531a2d41b.json'
 RVS_KEY = '../keys/UA Data Storage Keys/RVS/bubbly-fuze-426813-p9-371ff48952a4.json'
 URU_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json' 
@@ -23,7 +24,8 @@ RVS_VIEW = '107499264'
 NHSVR_VIEW = '225376456'
   # Your Google Analytics View ID
 
-POSTAL_PROJECT = 'oceanic-cache-426909-q9'
+POSTAL_PROJECT_OLD = 'oceanic-cache-426909-q9'
+POSTAL_PROJECT = 'ua-data-storage-postal'
 RVS_PROJECT = 'bubbly-fuze-426813-p9'
 NHSVS_PROJECT = 'ua-storage-426914'
 URU_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
@@ -44,15 +46,15 @@ RVS_DATE_RANGE = [{'startDate': '2015-08-25', 'endDate': '2023-10-04'}]
 # VIEW_ID = NHSVR_VIEW
 # BIGQUERY_PROJECT = NHSVS_PROJECT
 
-# KEY_FILE_LOCATION = POSTAL_KEY
-# DATE_RANGE = POSTAL_DATE_RANGE
-# VIEW_ID = POSTAL_VIEW
-# BIGQUERY_PROJECT = POSTAL_PROJECT
+KEY_FILE_LOCATION = POSTAL_KEY
+DATE_RANGE = POSTAL_DATE_RANGE
+VIEW_ID = POSTAL_VIEW
+BIGQUERY_PROJECT = POSTAL_PROJECT
 
-KEY_FILE_LOCATION = URU_FILE_LOCATION
-DATE_RANGE = URU_DATE_RANGE
-VIEW_ID = URU_REPORTING_VIEW
-BIGQUERY_PROJECT = URU_PROJECT
+# KEY_FILE_LOCATION = URU_FILE_LOCATION
+# DATE_RANGE = URU_DATE_RANGE
+# VIEW_ID = URU_REPORTING_VIEW
+# BIGQUERY_PROJECT = URU_PROJECT
 
 BIGQUERY_DATASET = 'ua_storage'  # BigQuery Dataset name where the data will be stored
 BIGQUERY_TABLE = 'reports'  # BigQuery Table name where the data will be stored
@@ -82,7 +84,7 @@ def get_report(analytics, dimensions, metrics):
                     # Metrics and dimensions are specified here
                     'metrics': metrics,
                     'dimensions': dimensions,
-                    'pageSize': 20000  # Adjust the pageSize as needed
+                    'pageSize': 200000  # Adjust the pageSize as needed
                 }
             ]
         }
