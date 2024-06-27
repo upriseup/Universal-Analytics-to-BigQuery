@@ -12,7 +12,7 @@ reports:
   - id: 5
     name: "Audience Demographics Overview"
     dimensions: ["ga:date","ga:userGender", "ga:userAgeBracket","ga:sourceMedium",]
-    metrics: ["ga:sessions", "ga:users", "ga:newUsers", "ga:bounceRate", "ga:pageviewsPerSession", "ga:avgSessionDuration", "ga:goal1Completions"]
+    metrics: ["ga:sessions", "ga:users", "ga:newUsers", "ga:bounceRate", "ga:pageviews", "ga:avgSessionDuration"]
     # Overview of user demographics.
     # Tailoring marketing strategies to target audiences and identifying demographic segments with the highest engagement.
 

@@ -12,11 +12,12 @@ URU_REPORTING_VIEW = '79428303'
 URU_MAIN_VIEW = '151196979'
 VIEW_ID = URU_REPORTING_VIEW  # Your Google Analytics View ID
 BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
-BIGQUERY_DATASET = 'ua_storage_test'  # BigQuery Dataset name where the data will be stored
+BIGQUERY_DATASET = 'ua_storage_test2'  # BigQuery Dataset name where the data will be stored
 BIGQUERY_TABLE = 'cheese-1'  # BigQuery Table name where the data will be stored
 NUMBER_OF_GOALS = 8
 # Setting up the environment variable for Google Application Credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = KEY_FILE_LOCATION
+metrics_goals_1 = [{'expression': f'ga:goal{i+1}Completions'} for i in range(NUMBER_OF_GOALS)]
 
 def initialize_analyticsreporting():
     """Initializes the Google Analytics Reporting API client."""
@@ -108,15 +109,17 @@ def upload_to_bigquery(df, project_id, dataset_id, table_id):
     load_job.result()
     print(f"Data uploaded to {full_table_id}")
 
-def metrics_goals(numberOfGoals):
-    metrics_goals_1 = [{'expression': f'ga:goal{i+1}Completions'} for i in range(numberOfGoals)]
-    NUMBER_OF_GOALS_2 = 10
-    metrics_goals_2 = [{'expression': f'ga:goal{i+11}Completions'} for i in range(NUMBER_OF_GOALS_2)]
+# def metrics_goals(numberOfGoals):
+#     metrics_goals_1 = [{'expression': f'ga:goal{i+1}Completions'} for i in range(numberOfGoals)]
+#     NUMBER_OF_GOALS_2 = 10
+#     metrics_goals_2 = [{'expression': f'ga:goal{i+11}Completions'} for i in range(NUMBER_OF_GOALS_2)]
+#     #NUMBER_OF_GOALS_2 = 10
+#         #metrics_goals_2 = [{'expression': f'ga:goal{i+11}Completions'} for i in range(NUMBER_OF_GOALS_2)]
 
 def main():
     """Main function to execute the script."""
     try:
-        tableName = "Audience Demographics Overview"
+        tableName = "Acquisition Overview"
         dimensions = [
             {'name': 'ga:date'},
             {'name': 'ga:campaign'},
@@ -125,24 +128,147 @@ def main():
         ]
         metrics = [
             {'expression': 'ga:sessions'},
-            {'expression': 'ga:pageviews'},
             {'expression': 'ga:users'},
             {'expression': 'ga:newUsers'},
             {'expression': 'ga:bounceRate'},
-            {'expression': 'ga:sessionDuration'},
+            {'expression': 'ga:pageviews'},
+            {'expression': 'ga:avgSessionDuration'},
         ]
-        metrics_goals_1 = [{'expression': f'ga:goal{i+1}Completions'} for i in range(NUMBER_OF_GOALS)]
-        #NUMBER_OF_GOALS_2 = 10
-        #metrics_goals_2 = [{'expression': f'ga:goal{i+11}Completions'} for i in range(NUMBER_OF_GOALS_2)]
         analytics = initialize_analyticsreporting()
         response = get_report(analytics, dimensions, metrics)
         df = response_to_dataframe(response)
         upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
-
-
+        tableName = tableName + " Goals"
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, dimensions, metrics_goals_1)
+        df = response_to_dataframe(response)
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
     except Exception as e:
         # Handling exceptions and printing error messages
+        print(tableName)
         print(f"Error occurred: {e}")
+
+    try:
+        tableName = "Audience Demographics Overview"
+        dimensions = [
+            {'name': 'ga:date'},
+            {'name': 'ga:userGender'},
+            {'name': 'ga:userAgeBracket'},
+            {'name': 'ga:sourceMedium'},
+        ]
+        metrics = [
+            {'expression': 'ga:sessions'},
+            {'expression': 'ga:users'},
+            {'expression': 'ga:newUsers'},
+            {'expression': 'ga:bounceRate'},
+            {'expression': 'ga:pageviews'},
+            {'expression': 'ga:avgSessionDuration'},
+        ]
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, dimensions, metrics)
+        df = response_to_dataframe(response)
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+        tableName = tableName + " Goals"
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, dimensions, metrics_goals_1)
+        df = response_to_dataframe(response)
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    except Exception as e:
+        # Handling exceptions and printing error messages
+        print(tableName)
+        print(f"Error occurred: {e}")
+
+    try:
+        tableName = "Geographic Distribution" 
+        dimensions = [
+            {'name': 'ga:date'},
+            {'name': 'ga:country'},
+            {'name': 'ga:city'},
+        ]
+        metrics = [
+            {'expression': 'ga:sessions'},
+            {'expression': 'ga:users'},
+            {'expression': 'ga:newUsers'},
+            {'expression': 'ga:bounceRate'},
+            {'expression': 'ga:pageviews'},
+            {'expression': 'ga:avgSessionDuration'},
+        ]
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, dimensions, metrics)
+        df = response_to_dataframe(response)
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+        tableName = tableName + " Goals"
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, dimensions, metrics_goals_1)
+        df = response_to_dataframe(response)
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    except Exception as e:
+        # Handling exceptions and printing error messages
+        print(tableName)
+        print(f"Error occurred: {e}")
+
+    try:
+        tableName="Device and Technology Usage " 
+        dimensions = [
+            {'name': 'ga:date'},
+            {'name': 'ga:deviceCategory'},
+            {'name': 'ga:browser'},
+            {'name': 'ga:operatingSystem '},
+        ]
+        metrics = [
+            {'expression': 'ga:sessions'},
+            {'expression': 'ga:users'},
+            {'expression': 'ga:newUsers'},
+            {'expression': 'ga:bounceRate'},
+            {'expression': 'ga:pageviews'},
+            {'expression': 'ga:avgSessionDuration'},
+        ]
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, dimensions, metrics)
+        df = response_to_dataframe(response)
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+        tableName = tableName + " Goals"
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, dimensions, metrics_goals_1)
+        df = response_to_dataframe(response)
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    except Exception as e:
+        # Handling exceptions and printing error messages
+        print(tableName)
+        print(f"Error occurred: {e}")
+
+    try:
+        tableName="Site Content Performance Overview"  
+        dimensions = [
+            {'name': 'ga:date'},
+            {'name': 'ga:pagePath'},
+            {'name': 'ga:sourceMedium'},
+        ]
+        metrics = [
+            {'expression': 'ga:sessions'},
+            {'expression': 'ga:users'},
+            {'expression': 'ga:newUsers'},
+            {'expression': 'ga:bounceRate'},
+            {'expression': 'ga:pageviews'},
+            {'expression': 'ga:avgSessionDuration'},
+        ]
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, dimensions, metrics)
+        df = response_to_dataframe(response)
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+        tableName = tableName + " Goals"
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, dimensions, metrics_goals_1)
+        df = response_to_dataframe(response)
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    except Exception as e:
+        # Handling exceptions and printing error messages
+        print(tableName)
+        print(f"Error occurred: {e}")
+
+    
+
+    
 
 if __name__ == '__main__':
     main()  # Entry point of the script
