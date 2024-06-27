@@ -7,17 +7,41 @@ import os
 
 # Configuration variables for Google Analytics and BigQuery
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
-KEY_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json'  # Path to your Google Cloud service account key file
+
+POSTAL_KEY = '../keys/UA Data Storage Keys/Postal Museum/oceanic-cache-426909-q9-fb060f06ea89.json'
+NHSVR_KEY = '../keys/UA Data Storage Keys/NHSVR/ua-storage-426914-b77531a2d41b.json'
+RVS_KEY = '../keys/UA Data Storage Keys/RVS/bubbly-fuze-426813-p9-371ff48952a4.json'
+URU_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json' 
+ # Path to your Google Cloud service account key file
+KEY_FILE_LOCATION = RVS_KEY
+
+
 URU_REPORTING_VIEW = '79428303'
-URU_MAIN_VIEW = '151196979'
-VIEW_ID = URU_REPORTING_VIEW  # Your Google Analytics View ID
-BIGQUERY_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
-BIGQUERY_DATASET = 'ua_storage_test3'  # BigQuery Dataset name where the data will be stored
-BIGQUERY_TABLE = 'cheese-1'  # BigQuery Table name where the data will be stored
-NUMBER_OF_GOALS = 8
+URU_MAIN_VIEW = '151196979'#
+POSTAL_VIEW = '132787952'
+RVS_VIEW = '107499264'
+NHSVR_VIEW = '225376456'
+VIEW_ID = RVS_VIEW  # Your Google Analytics View ID
+
+POSTAL_PROJECT = 'oceanic-cache-426909-q9'
+RVS_PROJECT = 'bubbly-fuze-426813-p9'
+NHSVS_PROJECT = 'ua-storage-426914'
+URU_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
+
+BIGQUERY_PROJECT = RVS_PROJECT
+BIGQUERY_DATASET = 'ua_storage'  # BigQuery Dataset name where the data will be stored
+BIGQUERY_TABLE = 'reports'  # BigQuery Table name where the data will be stored
+
+POSTAL_DATE_RANGE = [{'startDate': '2016-11-01', 'endDate': '2023-08-26'}]
+RVS_DATE_RANGE = [{'startDate': '2015-08-25', 'endDate': '2023-10-04'}]
+NHSVR_DATE_RANGE = [{'startDate': '2016-11-01', 'endDate': '2023-08-26'}]
+
+
+NUMBER_OF_GOALS = 10
 # Setting up the environment variable for Google Application Credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = KEY_FILE_LOCATION
 metrics_goals_1 = [{'expression': f'ga:goal{i+1}Completions'} for i in range(NUMBER_OF_GOALS)]
+#metrics_goals_2 = [{'expression': f'ga:goal{i+11}Completions'} for i in range(NUMBER_OF_GOALS)]
 
 def initialize_analyticsreporting():
     """Initializes the Google Analytics Reporting API client."""
@@ -34,7 +58,7 @@ def get_report(analytics, dimensions, metrics):
             'reportRequests': [
                 {
                     'viewId': VIEW_ID,
-                    'dateRanges': [{'startDate': '2020-07-01', 'endDate': '2020-07-31'}],
+                    'dateRanges': RVS_DATE_RANGE,
                     # Metrics and dimensions are specified here
                     'metrics': metrics,
                     'dimensions': dimensions,
@@ -43,10 +67,7 @@ def get_report(analytics, dimensions, metrics):
             ]
         }
     ).execute()
-    
-
-    
-
+       
 def response_to_dataframe(response):
     """Converts the API response into a pandas DataFrame."""
     # This function parses the response and converts it into a structured DataFrame
@@ -209,11 +230,11 @@ def main():
         print(" ")
 
     try:
-        tableName="Device and Technology Usage " 
+        tableName="Device and Technology Usage" 
         dimensions = [
             {'name': 'ga:date'},
             {'name': 'ga:deviceCategory'},
-            {'name': 'ga:browser'},
+            #{'name': 'ga:browser'}, # conficts with devicecat
             # {'name': 'ga:operatingSystem '},Unknown dimension(s): ga:operatingSystem
         ]
         metrics = [
@@ -241,7 +262,7 @@ def main():
         dimensions = [
             {'name': 'ga:date'},
             {'name': 'ga:pagePath'},
-            {'name': 'ga:sourceMedium'},
+            #{'name': 'ga:sourceMedium'},
         ]
         metrics = [
             {'expression': 'ga:pageviews'},
@@ -254,14 +275,10 @@ def main():
         response = get_report(analytics, dimensions, metrics)
         df = response_to_dataframe(response)
         upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
-        tableName = tableName + " Goals"
-        analytics = initialize_analyticsreporting()
-        response = get_report(analytics, dimensions, metrics_goals_1)
-        df = response_to_dataframe(response)
-        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
     except Exception as e:
         # Handling exceptions and printing error messages
-        print(tableName)
+        print()
+        print("error in: " + tableName)
         print(f"Error occurred: {e}")
         print()
     
