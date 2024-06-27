@@ -15,8 +15,6 @@ RVS_KEY = '../keys/UA Data Storage Keys/RVS/bubbly-fuze-426813-p9-371ff48952a4.j
 URU_FILE_LOCATION = '../keys/gtm-w6kpsfd7-yjbhm-5808ebc38263.json' 
  # Path to your Google Cloud service account key file
 
-
-
 URU_REPORTING_VIEW = '79428303'
 URU_MAIN_VIEW = '151196979'#
 POSTAL_VIEW = '132787952'
@@ -31,7 +29,29 @@ NHSVS_PROJECT = 'ua-storage-426914'
 URU_PROJECT = 'gtm-w6kpsfd7-yjbhm'  # Your Google Cloud Project ID
 
 URU_DATE_RANGE = [{'startDate': '2020-07-01', 'endDate': '2020-07-31'}]
+
 POSTAL_DATE_RANGE = [{'startDate': '2016-11-01', 'endDate': '2023-08-26'}]
+
+POSTAL_DATE_RANGE_1 = [{'startDate': '2016-11-01', 'endDate': '2019-12-31'}]
+POSTAL_DATE_RANGE_2 = [{'startDate': '2020-01-01', 'endDate': '2021-12-31'}]
+POSTAL_DATE_RANGE_3 = [{'startDate': '2022-01-01', 'endDate': '2023-08-26'}]
+
+DATE_2017 = [{'startDate': '2017-01-01', 'endDate': '2017-12-31'}]
+DATE_2017_Q1_Q2 = [{'startDate': '2017-01-01', 'endDate': '2017-06-30'}]
+DATE_2017_Q3_Q4 = [{'startDate': '2017-07-01', 'endDate': '2017-12-31'}]
+
+DATE_2015_RVS = [{'startDate': '2015-01-01', 'endDate': '2015-12-31'}]
+DATE_2016 = [{'startDate': '2016-01-01', 'endDate': '2016-12-31'}]
+DATE_2017 = [{'startDate': '2017-01-01', 'endDate': '2017-12-31'}]
+DATE_2018 = [{'startDate': '2018-01-01', 'endDate': '2018-12-31'}]
+DATE_2019 = [{'startDate': '2019-01-01', 'endDate': '2019-12-31'}]
+DATE_2020 = [{'startDate': '2020-01-01', 'endDate': '2020-12-31'}]
+DATE_2021 = [{'startDate': '2021-01-01', 'endDate': '2021-12-31'}]
+DATE_2022 = [{'startDate': '2022-01-01', 'endDate': '2022-12-31'}]
+DATE_2022_Q1Q2 = [{'startDate': '2022-01-01', 'endDate': '2022-06-30'}]
+DATE_2022_Q3Q4 = [{'startDate': '2022-07-01', 'endDate': '2022-12-31'}]
+DATE_2023 = [{'startDate': '2023-01-01', 'endDate': '2023-12-31'}]
+
 RVS_DATE_RANGE = [{'startDate': '2015-08-25', 'endDate': '2023-10-04'}]
 
 # NHSVR_DATE_RANGE = [{'startDate': '2016-11-01', 'endDate': '2023-08-26'}]
@@ -47,7 +67,13 @@ RVS_DATE_RANGE = [{'startDate': '2015-08-25', 'endDate': '2023-10-04'}]
 # BIGQUERY_PROJECT = NHSVS_PROJECT
 
 KEY_FILE_LOCATION = POSTAL_KEY
-DATE_RANGE = POSTAL_DATE_RANGE
+#DATE_RANGE = DATE_2017_Q1_Q2
+DATE_RANGE = DATE_2023 #POSTAL_DATE_RANGE
+startYear = DATE_RANGE[0].get('startDate')[:4]
+endYear = DATE_RANGE[0].get('endDate')[:4]
+startDate = DATE_RANGE[0].get('startDate')[:4] + " Q1 Q2"
+endDate = DATE_RANGE[0].get('endDate')[:4] + " Q3 Q4"
+
 VIEW_ID = POSTAL_VIEW
 BIGQUERY_PROJECT = POSTAL_PROJECT
 
@@ -56,7 +82,7 @@ BIGQUERY_PROJECT = POSTAL_PROJECT
 # VIEW_ID = URU_REPORTING_VIEW
 # BIGQUERY_PROJECT = URU_PROJECT
 
-BIGQUERY_DATASET = 'ua_storage'  # BigQuery Dataset name where the data will be stored
+BIGQUERY_DATASET = 'ua_data_storage'  # BigQuery Dataset name where the data will be stored
 BIGQUERY_TABLE = 'reports'  # BigQuery Table name where the data will be stored
 
 NUMBER_OF_GOALS = 8
@@ -162,7 +188,7 @@ def upload_to_bigquery(df, project_id, dataset_id, table_id):
 def main():
     """Main function to execute the script."""
     try:
-        tableName = "Acquisition Overview"
+        tableName = "Acquisition Overview"# +" "+ startYear 
         dimensions = [
             {'name': 'ga:date'},
             {'name': 'ga:campaign'},
@@ -192,7 +218,7 @@ def main():
         print(f"Error occurred: {e}")
 
     try:
-        tableName = "Audience Demographics Overview" # only one row for uru in july
+        tableName = "Audience Demographics Overview"#  +" "+ startYear 
         dimensions = [
             {'name': 'ga:date'},
             {'name': 'ga:userGender'},
@@ -222,9 +248,9 @@ def main():
         print(f"Error occurred: {e}")
 
     try:
-        tableName = "Geographic Distribution" 
+        tableName = "Geographic Distribution"#+" "+ startYear 
         dimensions = [
-            {'name': 'ga:date'},
+            {'name': 'ga:yearWeek'},
             {'name': 'ga:country'},
             {'name': 'ga:city'},
         ]
@@ -252,7 +278,7 @@ def main():
         print(" ")
 
     try:
-        tableName="Device and Technology Usage" 
+        tableName="Device and Technology Usage"#  +" "+ startYear 
         dimensions = [
             {'name': 'ga:date'},
             {'name': 'ga:deviceCategory'},
@@ -280,10 +306,12 @@ def main():
         print()
 
     try:
-        tableName="Site Content Performance Overview"  
+        tableName="Site Content Performance Overview"# +" "+ startYear 
         dimensions = [
-            {'name': 'ga:date'},
-            {'name': 'ga:pagePath'},
+            # {'name': 'ga:yearMonth'},
+            {'name': 'ga:yearWeek'},
+            {'name': 'ga:pageTitle'},
+            #{'name': 'ga:date'}, # hits row limit for half a year
             #{'name': 'ga:sourceMedium'},
         ]
         metrics = [
@@ -303,6 +331,137 @@ def main():
         print("error in: " + tableName)
         print(f"Error occurred: {e}")
         print()
+
+    try:
+        tableName = "Transaction History"  # + " " + startYear
+        dimensions = [
+            {'name': 'ga:date'},
+            # {'name': 'ga:productName'},
+            {'name': 'ga:transactionId'},
+            # {'name': 'ga:productCategory'},
+            # {'name': 'ga:productSku'},
+            {'name': 'ga:daysToTransaction'},
+        ]
+        metrics = [
+            {'expression': 'ga:transactions'},
+            # {'expression': 'ga:itemQuantity'},
+            # {'expression': 'ga:revenuePerItem'},
+            {'expression': 'ga:totalValue'},
+        ]
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, dimensions, metrics)
+        df = response_to_dataframe(response)
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    except Exception as e:
+        # Handling exceptions and printing error messages
+        print()
+        print("error in: " + tableName)
+        print(f"Error occurred: {e}")
+        print()
+
+    try:
+        tableName = "Product Performance"  # + " " + startYear
+        dimensions = [
+            {'name': 'ga:date'},
+            {'name': 'ga:productName'},
+            {'name': 'ga:productCategory'},
+            {'name': 'ga:productSku'},
+            #{'name': 'ga:transactionId'},
+            #{'name': 'ga:productCategory'},
+            #{'name': 'ga:productSku'},
+            #{'name': 'ga:daysToTransaction'},
+        ]
+        metrics = [
+            {'expression': 'ga:itemRevenue'},
+        ]
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, dimensions, metrics)
+        df = response_to_dataframe(response)
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    except Exception as e:
+        # Handling exceptions and printing error messages
+        print()
+        print("error in: " + tableName)
+        print(f"Error occurred: {e}")
+        print()
+    try:
+        tableName = "Ecommerce Performance Overview"  # + " " + startYear
+        dimensions = [
+            {'name': 'ga:date'},
+            # {'name': 'ga:productName'},
+            # {'name': 'ga:productCategory'},
+            # {'name': 'ga:productSku'},
+            #{'name': 'ga:transactionId'},
+            #{'name': 'ga:productCategory'},
+            #{'name': 'ga:productSku'},
+            #{'name': 'ga:daysToTransaction'},
+        ]
+        metrics = [
+            {'expression': 'ga:itemRevenue'},
+            {'expression': 'ga:transactionsPerSession'},
+        ]
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, dimensions, metrics)
+        df = response_to_dataframe(response)
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    except Exception as e:
+        # Handling exceptions and printing error messages
+        print()
+        print("error in: " + tableName)
+        print(f"Error occurred: {e}")
+        print()
+        
+    try:
+        tableName = "User Engagement Over Time"  # + " " + startYear
+        dimensions = [
+            {'name': 'ga:date'},
+            {'name': 'ga:hour'},
+            {'name': 'ga:dayOfWeek'},
+        ]
+        metrics = [
+            {'expression': 'ga:users'},
+            {'expression': 'ga:sessions'},
+            {'expression': 'ga:sessionDuration'},
+            {'expression': 'ga:avgSessionDuration'},
+            {'expression': 'ga:avgSessionDuration'},
+            {'expression': 'ga:bounceRate'},
+            {'expression': 'ga:pageviews'},
+        ]
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, dimensions, metrics)
+        df = response_to_dataframe(response)
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    except Exception as e:
+        # Handling exceptions and printing error messages
+        print()
+        print("error in: " + tableName)
+        print(f"Error occurred: {e}")
+        print()
+
+    try:
+        tableName = "Audience Loyalty and Retention"  # + " " + startYear
+        dimensions = [
+            {'name': 'ga:userType'},
+            {'name': 'ga:sessionCount'},
+            {'name': 'ga:daysSinceLastSession'},
+        ]
+        metrics = [
+            {'expression': 'ga:sessions'},
+            {'expression': 'ga:pageviews'},
+            {'expression': 'ga:avgSessionDuration'},
+            {'expression': 'ga:bounceRate'},
+        ]
+        analytics = initialize_analyticsreporting()
+        response = get_report(analytics, dimensions, metrics)
+        df = response_to_dataframe(response)
+        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    except Exception as e:
+        # Handling exceptions and printing error messages
+        print()
+        print("error in: " + tableName)
+        print(f"Error occurred: {e}")
+        print()
+    
     
 if __name__ == '__main__':
     main()  # Entry point of the script
