@@ -53,7 +53,7 @@ DATE_2022_Q1Q2 = [{'startDate': '2022-01-01', 'endDate': '2022-06-30'}]
 DATE_2022_Q3Q4 = [{'startDate': '2022-07-01', 'endDate': '2022-12-31'}]
 DATE_2023 = [{'startDate': '2023-01-01', 'endDate': '2023-12-31'}]
 
-RVS_DATE_RANGE = [{'startDate': '2015-08-25', 'endDate': '2023-10-04'}]
+#RVS_DATE_RANGE = [{'startDate': '2015-08-25', 'endDate': '2023-10-04'}]
 RVS_NEW_DATE_RANGE = [{'startDate': '2007-01-01', 'endDate': '2023-10-04'}]
 RVS_NEW_DATE_RANGE_1 = [{'startDate': '2007-01-01', 'endDate': '2018-12-31'}]
 RVS_NEW_DATE_RANGE_2 = [{'startDate': '2019-01-01', 'endDate': '2023-10-04'}]
@@ -72,7 +72,7 @@ RVS_NEW_DATE_RANGE_2 = [{'startDate': '2019-01-01', 'endDate': '2023-10-04'}]
 
 KEY_FILE_LOCATION = RVS_KEY
 #DATE_RANGE = DATE_2017_Q1_Q2
-DATE_RANGE = RVS_NEW_DATE_RANGE_2#DATE_2023 #POSTAL_DATE_RANGE iterate through all years, two halfs for 2022
+DATE_RANGE = RVS_NEW_DATE_RANGE#DATE_2023 #POSTAL_DATE_RANGE iterate through all years, two halfs for 2022
 startYear = DATE_RANGE[0].get('startDate')[:4]
 endYear = DATE_RANGE[0].get('endDate')[:4]
 startDate = DATE_RANGE[0].get('startDate')[:4] + " Q1 Q2"
@@ -192,43 +192,41 @@ def upload_to_bigquery(df, project_id, dataset_id, table_id):
 
 def main():
     """Main function to execute the script."""
-    try:
-        tableName = "Acquisition Overview"# +" "+ startYear 
-        dimensions = [
-            {'name': 'ga:date'},
-            {'name': 'ga:campaign'},
-            {'name': 'ga:source'},
-            {'name': 'ga:medium'},
-        ]
-        metrics = [
-            {'expression': 'ga:sessions'},
-            {'expression': 'ga:users'},
-            {'expression': 'ga:newUsers'},
-            {'expression': 'ga:bounceRate'},
-            {'expression': 'ga:pageviews'},
-            {'expression': 'ga:avgSessionDuration'},
-        ]
-
-        # Main analytics pull
-        analytics = initialize_analyticsreporting()
-        response = get_report(analytics, dimensions, metrics)
-        df = response_to_dataframe(response)
-        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
-        # goals bit
-        # tableName = tableName + " Goals"
-        # analytics = initialize_analyticsreporting()
-        # response = get_report(analytics, dimensions, metrics_goals_1)
-        # df = response_to_dataframe(response)
-        # upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
-        # tableName = tableName + " 2"
-        # analytics = initialize_analyticsreporting()
-        # response = get_report(analytics, dimensions, metrics_goals_2)
-        # df = response_to_dataframe(response)
-        # upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
-    except Exception as e:
-        # Handling exceptions and printing error messages
-        print(tableName)
-        print(f"Error occurred: {e}")
+    # try:
+    #     tableName = "Acquisition Overview"# +" "+ startYear 
+    #     dimensions = [
+    #         {'name': 'ga:date'},
+    #         {'name': 'ga:campaign'},
+    #         {'name': 'ga:source'},
+    #         {'name': 'ga:medium'},
+    #     ]
+    #     metrics = [
+    #         {'expression': 'ga:sessions'},
+    #         {'expression': 'ga:users'},
+    #         {'expression': 'ga:newUsers'},
+    #         {'expression': 'ga:bounceRate'},
+    #         {'expression': 'ga:pageviews'},
+    #         {'expression': 'ga:avgSessionDuration'},
+    #     ]
+    #     analytics = initialize_analyticsreporting()
+    #     response = get_report(analytics, dimensions, metrics)
+    #     df = response_to_dataframe(response)
+    #     upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    #     # goals bit
+    #     # tableName = tableName + " Goals"
+    #     # analytics = initialize_analyticsreporting()
+    #     # response = get_report(analytics, dimensions, metrics_goals_1)
+    #     # df = response_to_dataframe(response)
+    #     # upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    #     # tableName = tableName + " 2"
+    #     # analytics = initialize_analyticsreporting()
+    #     # response = get_report(analytics, dimensions, metrics_goals_2)
+    #     # df = response_to_dataframe(response)
+    #     # upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    # except Exception as e:
+    #     # Handling exceptions and printing error messages
+    #     print(tableName)
+    #     print(f"Error occurred: {e}")
 
     try:
         tableName = "Audience Demographics Overview"#  +" "+ startYear 
@@ -265,40 +263,40 @@ def main():
         print(tableName)
         print(f"Error occurred: {e}")
 
-    try:
-        tableName = "Geographic Distribution"#+" "+ startYear 
-        dimensions = [
-            {'name': 'ga:yearWeek'},
-            {'name': 'ga:country'},
-            {'name': 'ga:city'},
-        ]
-        metrics = [
-            {'expression': 'ga:sessions'},
-            {'expression': 'ga:users'},
-            {'expression': 'ga:newUsers'},
-            {'expression': 'ga:bounceRate'},
-            {'expression': 'ga:pageviews'},
-            {'expression': 'ga:avgSessionDuration'},
-        ]
-        analytics = initialize_analyticsreporting()
-        response = get_report(analytics, dimensions, metrics)
-        df = response_to_dataframe(response)
-        upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
-        # tableName = tableName + " Goals"
-        # analytics = initialize_analyticsreporting()
-        # response = get_report(analytics, dimensions, metrics_goals_1)
-        # df = response_to_dataframe(response)
-        # upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
-        # tableName = tableName + " 2"
-        # analytics = initialize_analyticsreporting()
-        # response = get_report(analytics, dimensions, metrics_goals_2)
-        # df = response_to_dataframe(response)
-        # upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
-    except Exception as e:
-        # Handling exceptions and printing error messages
-        print(tableName)
-        print(f"Error occurred: {e}")
-        print(" ")
+    # try:
+    #     tableName = "Geographic Distribution"#+" "+ startYear 
+    #     dimensions = [
+    #         {'name': 'ga:yearWeek'},
+    #         {'name': 'ga:country'},
+    #         {'name': 'ga:city'},
+    #     ]
+    #     metrics = [
+    #         {'expression': 'ga:sessions'},
+    #         {'expression': 'ga:users'},
+    #         {'expression': 'ga:newUsers'},
+    #         {'expression': 'ga:bounceRate'},
+    #         {'expression': 'ga:pageviews'},
+    #         {'expression': 'ga:avgSessionDuration'},
+    #     ]
+    #     analytics = initialize_analyticsreporting()
+    #     response = get_report(analytics, dimensions, metrics)
+    #     df = response_to_dataframe(response)
+    #     upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    #     # tableName = tableName + " Goals"
+    #     # analytics = initialize_analyticsreporting()
+    #     # response = get_report(analytics, dimensions, metrics_goals_1)
+    #     # df = response_to_dataframe(response)
+    #     # upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    #     # tableName = tableName + " 2"
+    #     # analytics = initialize_analyticsreporting()
+    #     # response = get_report(analytics, dimensions, metrics_goals_2)
+    #     # df = response_to_dataframe(response)
+    #     # upload_to_bigquery(df, BIGQUERY_PROJECT, BIGQUERY_DATASET, tableName)
+    # except Exception as e:
+    #     # Handling exceptions and printing error messages
+    #     print(tableName)
+    #     print(f"Error occurred: {e}")
+    #     print(" ")
 
     try:
         tableName="Device and Technology Usage"#  +" "+ startYear 
